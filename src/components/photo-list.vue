@@ -2,10 +2,11 @@
   .gallery__photo-wrapper
     .gallery__photo__container
       img.gallery__photo(:src="photo.urls.regular")
+      //- .gallery__photo(v-bind:style="{backgroundImage: url('photo.urls.regular')}")
     .gallery__photo__info
       .gallery__photo__info-likes
         icon(name="heart") 
-        span {{ photo.likes }}
+        span {{ photo.likes }} 
       .gallery__photo__info-user
         img(:src="photo.user.profile_image.small")
         a(:href="photo.user.links.html") {{ photo.user.name }}
@@ -46,6 +47,7 @@ export default {
     .gallery__photo
       width: 100%
       background-color: #ddd
+      cursor: zoom-in
     .gallery__photo__info
       display: flex
       align-items: center
