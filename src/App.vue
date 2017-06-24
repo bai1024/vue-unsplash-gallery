@@ -1,7 +1,7 @@
 <template lang='pug'>
   <div id="app">
     h1 Unsplash Gallery
-    //- .gallery__zoomin(v-bind:style="{backgroundImage: ")
+    .gallery__zoomin(v-bind:style="{backgroundImage:'url(' + url + ')'}")
     .gallery__layout
       <svg v-bind:class="{'gallery__layout__btn--active': isActive }" v-on:click="isActive = true" version="1.1" viewBox="0 0 32 32" width="32" height="32" aria-labelledby="icon-title-4721 icon-desc-4722" aria-hidden="false" data-reactid=".rwftimv01s.0.4.0.3.0.1.$single.0"><path d="M30 14c1.1 0 2-.9 2-2v-10c0-1.1-.9-2-2-2h-28c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2m0 18c-1.1 0-2-.9-2-2v-10c0-1.1.9-2 2-2h28c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2" data-reactid=".rwftimv01s.0.4.0.3.0.1.$single.0.1"></path></svg>
       
@@ -13,7 +13,8 @@
           v-for="(photo,index) in photos",
           :key="photo.id",
           :photo="photo", 
-          :index="index"
+          :index="index",
+          v-on:listenToChildEvent="showMsg"
         )
 
       .gallery__grid__container(v-if="!isActive")
@@ -21,19 +22,19 @@
           photo-grid(
             v-for="photo in data1",
             :key="photo.id",
-            :photo="photo"
+            :photo="photo",
           )
         .gallery__grid
           photo-grid(
             v-for="photo in data2",
             :key="photo.id",
-            :photo="photo"
+            :photo="photo",
           )
         .gallery__grid
           photo-grid(
             v-for="photo in data3",
             :key="photo.id",
-            :photo="photo"
+            :photo="photo",
           )
     loading(v-else)  
   </div>
@@ -58,7 +59,7 @@ export default {
       data1:null,
       data2:null,
       data3:null,
-      isDefault: true
+      url:null
     }
   },
   methods:{
@@ -79,6 +80,11 @@ export default {
     },
     waypointHandler(){
 
+    },
+    showMsg:function(data){
+      console.log(data)
+      this.url = data
+      console.log(this.url)
     }
   },
   created(){
@@ -99,13 +105,24 @@ export default {
     width: 80%;
     max-width: 1176px;
     margin: auto;
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
-
+  
+  .gallery__zoomin
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    pointer-events: none
+    z-index: 6;
+    background-position: 50%;
+    background-size: cover
+    overflow: auto
   .gallery__layout
     margin-bottom: 24px;
     svg

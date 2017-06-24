@@ -1,6 +1,6 @@
 <template lang="pug">
   .gallery__photo-wrapper
-    .gallery__photo__container
+    .gallery__photo__container(v-on:click="sendMsgToParent(photo.urls.full)")
       img.gallery__photo(:src="photo.urls.regular")
       //- .gallery__photo(v-bind:style="{backgroundImage: url('photo.urls.regular')}")
     .gallery__photo__info
@@ -35,6 +35,11 @@ export default {
   data () {
     return {
       
+    }
+  },
+  methods:{
+    sendMsgToParent:function(url){
+      this.$emit("listenToChildEvent",url)
     }
   },
   components:{ Icon }
