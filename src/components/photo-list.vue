@@ -10,7 +10,8 @@
       .gallery__photo__info-user
         img(:src="photo.user.profile_image.small")
         a(:href="photo.user.links.html") {{ photo.user.name }}
-      a.gallery__photo__info-download Download
+      a.gallery__photo__info-download(:href="photo.urls.raw", :download="true") 
+        | Download
 
 
 </template>
@@ -82,6 +83,7 @@ export default {
         border: #ddd 1px solid
         border-radius: 5px
         padding: 6px 15px;
+        text-decoration: none
         &:hover
           color: #111
           border-color: #999

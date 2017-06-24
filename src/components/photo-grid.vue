@@ -2,16 +2,19 @@
   .gallery__photo-wrapper
     .gallery__photo__container
       //- img.gallery__photo(:src="photo.urls.small")
+      
       .gallery__photo(v-bind:style="{backgroundImage:'url(' + photo.urls.small + ')',height:(photo.height / (photo.width / 400)) + 'px',backgroundColor: getRandomColor}")
+      .gallery__photo-hover(v-bind:style="{height:(photo.height / (photo.width / 400)) + 'px'}")
     .gallery__photo__info
       .gallery__photo__info-likes
         icon(name="heart") 
         span {{ photo.likes }}
       .gallery__photo__info-user
-        img(:src="photo.user.profile_image.small")
+        img(:src="photo.user.profile_image.small") 
         a(:href="photo.user.links.html") {{ photo.user.name }}
-      a.gallery__photo__info-download 
-        icon(name="arrow-down")
+      a.gallery__photo__info-download(:href="photo.urls.raw", :download="true") 
+        icon(name="arrow-down") 
+
 
 
 </template>
@@ -59,14 +62,22 @@ export default {
   .gallery__photo-wrapper
     margin-bottom: 20px
     position: relative
+    .gallery__photo__container
+      
     .gallery__photo
-      width: 100%
-      // height: 200px
+      width: 100%;
       background-color: #ddd
+      
+    .gallery__photo-hover
+      position: absolute
+      width: 100%
+      top: 0
     .gallery__photo__info
       opacity: 0
+      height: 100%
       &:hover
-        opacity: 0.9
+        opacity: 1
+        transition: opacity 0.5s
       .gallery__photo__info-likes
         position: absolute
         top: 20px;
@@ -85,7 +96,7 @@ export default {
           margin-right: 5px
       .gallery__photo__info-user
         position: absolute
-        bottom: 28px;
+        bottom: 20px;
         left: 10px;
         display: flex
         align-items: center
@@ -114,4 +125,11 @@ export default {
           border-color: #999
           box-shadow: 0 1px 2px rgba(0,0,0,.08)
           transition: all .2s ease-in-out;
+          
+    &:hover
+      .gallery__photo-hover
+        background-image: linear-gradient(180deg,rgba(0,0,0,.25) 0,transparent 40%,transparent 60%,rgba(0,0,0,.3));
+      .gallery__photo__info
+        opacity: 1
+        transition: opacity 0.5s
 </style>
