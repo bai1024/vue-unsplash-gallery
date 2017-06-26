@@ -12,8 +12,6 @@
         a(:href="photo.user.links.html") {{ photo.user.name }}
       a.gallery__photo__info-download(:href="photo.urls.raw", :download="true") 
         | Download
-
-
 </template>
 
 <script>
@@ -39,7 +37,7 @@ export default {
   },
   methods:{
     sendMsgToParent:function(url){
-      this.$emit("listenToChildEvent",url)
+      this.$emit("zoomInPic",url)
     }
   },
   components:{ Icon }

@@ -1,6 +1,6 @@
 <template lang="pug">
   .gallery__photo-wrapper
-    .gallery__photo__container
+    .gallery__photo__container(v-on:click="sendMsgToParent(photo.urls.full)")
       //- img.gallery__photo(:src="photo.urls.small")
       
       .gallery__photo(v-bind:style="{backgroundImage:'url(' + photo.urls.small + ')',height:(photo.height / (photo.width / 400)) + 'px',backgroundColor: getRandomColor}")
@@ -31,15 +31,16 @@ export default {
     photo:{
       type: Object,
       required: true
-    },
-    // index:{
-    //   type: Number,
-    //   required:true
-    // }
+    }
   },
   data () {
     return {
       
+    }
+  },
+  methods:{
+     sendMsgToParent:function(url){
+      this.$emit("zoomInPic",url)
     }
   },
   computed:{
@@ -62,7 +63,7 @@ export default {
     margin-bottom: 20px
     position: relative
     .gallery__photo__container
-      
+      cursor:zoom-in
     .gallery__photo
       width: 100%;
       background-color: #ddd
@@ -84,8 +85,7 @@ export default {
         margin: 0
         color: #999
         background: #f0f0f0;
-        opacity: .9;
-        border: 1px solid #ddd
+        opacity: .8;
         padding: 6px 15px
         border-radius: 5px
         display: flex
@@ -93,6 +93,9 @@ export default {
         > svg
           color: #f15151
           margin-right: 5px
+        &:hover
+          opacity: .9
+          transition: all .2s ease-in-out;
       .gallery__photo__info-user
         position: absolute
         bottom: 20px;
@@ -103,25 +106,26 @@ export default {
           border-radius: 50%
           margin-right: 10px
         > a
-          color: #ccc
+          color: #ffffff
+          opacity: 0.8
+          text-decoration: none
           &:hover
-            color: #ffffff
+            opacity: 1
+            transition: all .2s ease-in-out;
       .gallery__photo__info-download
         color: #999
         fill: currentColor
         font-weight: bold
-        background-color: transparent
-        border: #ddd 1px solid
+        background-color: #ffffff
         border-radius: 5px
         padding: 6px 15px;
         position: absolute;
         bottom: 20px;
         right: 20px;
-        background: #f0f0f0;
-        opacity: .9;
+        opacity: .7;
         &:hover
           color: #111
-          border-color: #999
+          opacity: .9
           box-shadow: 0 1px 2px rgba(0,0,0,.08)
           transition: all .2s ease-in-out;
           

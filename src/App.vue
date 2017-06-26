@@ -18,7 +18,7 @@
           :key="photo.id",
           :photo="photo", 
           :index="index",
-          v-on:listenToChildEvent="showMsg"
+          v-on:zoomInPic="showPhoto"
         )
 
       .gallery__grid__container(v-if="!isDefault")
@@ -27,18 +27,21 @@
             v-for="photo in data1",
             :key="photo.id",
             :photo="photo",
+            v-on:zoomInPic="showPhoto"
           )
         .gallery__grid
           photo-grid(
             v-for="photo in data2",
             :key="photo.id",
             :photo="photo",
+            v-on:zoomInPic="showPhoto"
           )
         .gallery__grid
           photo-grid(
             v-for="photo in data3",
             :key="photo.id",
             :photo="photo",
+            v-on:zoomInPic="showPhoto"
           )
     loading(v-else)  
   </div>
@@ -86,7 +89,7 @@ export default {
     waypointHandler(){
 
     },
-    showMsg:function(data){
+    showPhoto:function(data){
       this.url = data
       this.isActive = true
     }
@@ -123,6 +126,7 @@ export default {
       font-size: 18px
       font-weight: 400
       color: #111
+      line-height: 1.6
 
   .gallery__zoomin
     position: fixed;
@@ -133,11 +137,12 @@ export default {
     z-index: 6;
     background-position: 50%;
     background-size: cover
-    overflow: auto
-    cursor: zoom-out
+    overflow: auto    
+    transition: transform .35s cubic-bezier(.77,0,.175,1),-webkit-transform .35s cubic-bezier(.77,0,.175,1);
     
   .gallery__zoomin__hide
     pointer-events: none
+    transform: translateY(100vh);
     
   .gallery__layout
     margin-bottom: 24px;
