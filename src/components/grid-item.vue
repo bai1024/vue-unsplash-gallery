@@ -1,22 +1,18 @@
 <template lang="pug">
-  .gallery__photo-wrapper
-    .gallery__photo__container(v-on:click="sendMsgToParent(photo.urls.full)")
-      //- img.gallery__photo(:src="photo.urls.small")
-      
-      .gallery__photo(v-bind:style="{backgroundImage:'url(' + photo.urls.small + ')',height:(photo.height / (photo.width / 400)) + 'px',backgroundColor: getRandomColor}")
-      .gallery__photo-hover(v-bind:style="{height:(photo.height / (photo.width / 400)) + 'px'}")
-    .gallery__photo__info
-      .gallery__photo__info-likes
+  .grid-item
+    .grid__item__container(v-on:click="$emit('zoomIn', photo.urls.full)")
+      //- img.grid__item(:src="photo.urls.small") 
+      .grid__item(v-bind:style="{backgroundImage:'url(' + photo.urls.small + ')',height:(photo.height / (photo.width / 400)) + 'px',backgroundColor: getRandomColor}")
+      .grid__item-hover(v-bind:style="{height:(photo.height / (photo.width / 400)) + 'px'}")
+    .grid__item__info
+      .grid__item__info-likes
         icon(name="heart") 
         span {{ photo.likes }}
-      .gallery__photo__info-user
+      .grid__item__info-user
         img(:src="photo.user.profile_image.small") 
         a(:href="photo.user.links.html") {{ photo.user.name }}
-      a.gallery__photo__info-download(:href="photo.urls.raw", :download="true") 
+      a.grid__item__info-download(:href="photo.urls.raw", download) 
         icon(name="arrow-down") 
-
-
-
 </template>
 
 <script>
@@ -38,11 +34,6 @@ export default {
       
     }
   },
-  methods:{
-     sendMsgToParent:function(url){
-      this.$emit("zoomInPic",url)
-    }
-  },
   computed:{
     getRandomColor:function (){
       var letters = '789ABCDF';
@@ -59,26 +50,31 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped>
-  .gallery__photo-wrapper
+  .grid-item
     margin-bottom: 20px
     position: relative
-    .gallery__photo__container
+    &:hover
+      .grid__item-hover
+        background-image: linear-gradient(180deg,rgba(0,0,0,.25) 0,transparent 40%,transparent 60%,rgba(0,0,0,.3));
+      .grid__item__info
+        opacity: 1
+        transition: opacity 0.5s
       cursor:zoom-in
-    .gallery__photo
+    .grid__item
       width: 100%;
       background-color: #ddd
       
-    .gallery__photo-hover
+    .grid__item-hover
       position: absolute
       width: 100%
       top: 0
-    .gallery__photo__info
+    .grid__item__info
       opacity: 0
       height: 100%
       &:hover
         opacity: 1
         transition: opacity 0.5s
-      .gallery__photo__info-likes
+      .grid__item__info-likes
         position: absolute
         top: 20px;
         right: 20px;
@@ -96,7 +92,7 @@ export default {
         &:hover
           opacity: .9
           transition: all .2s ease-in-out;
-      .gallery__photo__info-user
+      .grid__item__info-user
         position: absolute
         bottom: 20px;
         left: 10px;
@@ -112,7 +108,7 @@ export default {
           &:hover
             opacity: 1
             transition: all .2s ease-in-out;
-      .gallery__photo__info-download
+      .grid__item__info-download
         color: #999
         fill: currentColor
         font-weight: bold
@@ -129,10 +125,5 @@ export default {
           box-shadow: 0 1px 2px rgba(0,0,0,.08)
           transition: all .2s ease-in-out;
           
-    &:hover
-      .gallery__photo-hover
-        background-image: linear-gradient(180deg,rgba(0,0,0,.25) 0,transparent 40%,transparent 60%,rgba(0,0,0,.3));
-      .gallery__photo__info
-        opacity: 1
-        transition: opacity 0.5s
+    
 </style>
