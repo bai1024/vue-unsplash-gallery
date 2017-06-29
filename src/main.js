@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import VueWaypoint from 'vue-waypoint'
+import './global'
 
 Vue.config.productionTip = false
 

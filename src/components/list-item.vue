@@ -1,7 +1,10 @@
 <template lang="pug">
 .list-item
-  div(v-on:click="$emit('zoomIn', photo.urls.full)")
-    img.list-item__photo(:src="photo.urls.regular")
+  div
+    img.list-item__photo(
+      :src="photo.urls.regular"
+      @click="zoomIn"
+    )
   .list-item__info
     .list-item__info-likes
       icon(name="heart")
@@ -15,7 +18,7 @@
 
 <script>
 import Icon from "vue-awesome/components/Icon"
-import "vue-awesome/icons/heart"
+import { bus } from "@/global"
 
 export default {
   props:{
@@ -23,6 +26,12 @@ export default {
       type: Object,
       required: true
     },
+  },
+  methods: {
+    zoomIn() {
+      console.log('adfa')
+      bus.$emit("zoomIn",this.photo.urls.full)
+    }
   },
   components:{ Icon }
 }

@@ -1,6 +1,7 @@
 <template lang="pug">
 svg(
-  :class= classObj
+  class="gallery__layout__btn"
+  :class= "classObj"
   viewBox= "0 0 32 32" 
   width= "32" 
   height= "32" 

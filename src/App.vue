@@ -21,45 +21,26 @@
       @click.native="layout = GRID_LAYOUT"
     )
   template(v-if="photos")
-    .gallery__list__container(v-if="layout === LIST_LAYOUT")
-      list-item(
-        v-for="photo in photos",
-        :key="photo.id",
-        :photo="photo",
-        @zoomIn="zoomInPhoto",
-      )
-    .gallery__grid__container(v-if="layout === GRID_LAYOUT")
-      .gallery__grid
-        grid-item(
-          v-for="photo in data1",
-          :key="photo.id",
-          :photo="photo",
-          @zoomIn="zoomInPhoto",
-        )
-      .gallery__grid
-        grid-item(
-          v-for="photo in data2",
-          :key="photo.id",
-          :photo="photo",
-          @zoomIn="zoomInPhoto",
-        )
-      .gallery__grid
-        grid-item(
-          v-for="photo in data3",
-          :key="photo.id",
-          :photo="photo",
-          @zoomIn="zoomInPhoto",
-        )
+    photo-list(
+      :photos="photos",
+      v-if="layout === LIST_LAYOUT"
+    )
+    photo-grid(
+      :photos="photos"
+      v-if="layout === GRID_LAYOUT"
+    )
+      
   loading(v-else)
 </template>
 
 <script>
 import axios from 'axios'
-import ListItem from '@/components/list-item'
-import GridItem from '@/components/grid-item'
 import Loading from '@/components/loading'
 import IconList from '@/components/icon-list'
 import IconGrid from '@/components/icon-grid'
+import PhotoList from '@/components/photo-list'
+import PhotoGrid from '@/components/photo-grid'
+import { bus } from '@/global'
 
 const clientId = '47da73da2b740608b32dd1d201e72606000e8db1df885e6f2c72843cddca23a8'
 
@@ -69,7 +50,7 @@ export default {
       page: 1,
       layout: 1,
       photos: null,
-      zoomInPhotoURL: null,
+      zoomInPhotoURL: "",
       LIST_LAYOUT: 1,
       GRID_LAYOUT: 2,
     }
@@ -91,23 +72,23 @@ export default {
     },
     waypointHandler(){
 
-    },
-    zoomInPhoto(fullURL){
-      this.zoomInPhotoURL = fullURL
     }
   },
-  computed: {
-
+  created() {
+    bus.$on("zoomIn", (fullURL) => {
+      console.log('hahahha')
+      this.zoomInPhotoURL = fullURL
+    })
   },
   created(){
     this.fetchData()
   },
   components: {
-    ListItem,
-    GridItem,
     Loading,
     IconList,
     IconGrid,
+    PhotoList,
+    PhotoGrid
   },
 }
 </script>
@@ -150,19 +131,22 @@ export default {
 .gallery__layout
   margin-bottom: 24px;
   text-align: right
-  svg
+
+.gallery__layout__btn
     width: 20px;
     fill: gray;
     margin: 0 10px;
     cursor: pointer;
     &:hover
       fill: #111
-  .gallery__layout__btn--active
-    fill: #111
+      
+.gallery__layout__btn--active
+  fill: #111
 
 .gallery__grid__container
   display: flex
   justify-content: space-between
-  .gallery__grid
-    width: 32%
+  
+.gallery__grid
+  width: 32%
 </style>

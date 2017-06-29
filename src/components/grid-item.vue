@@ -2,7 +2,9 @@
   .grid-item
     .grid__item__container(v-on:click="$emit('zoomIn', photo.urls.full)")
       //- img.grid__item(:src="photo.urls.small") 
-      .grid__item(v-bind:style="{backgroundImage:'url(' + photo.urls.small + ')',height:(photo.height / (photo.width / 400)) + 'px',backgroundColor: getRandomColor}")
+      .grid__item(
+        :style="photoStyle"
+        )
       .grid__item-hover(v-bind:style="{height:(photo.height / (photo.width / 400)) + 'px'}")
     .grid__item__info
       .grid__item__info-likes
@@ -17,10 +19,7 @@
 
 <script>
 import Icon from "vue-awesome/components/Icon"
-import "vue-awesome/icons/heart"
-import "vue-awesome/icons/arrow-down"
-
-
+import { getRandomColor } from "@/utlis"
 
 export default {
   props:{
@@ -35,13 +34,12 @@ export default {
     }
   },
   computed:{
-    getRandomColor:function (){
-      var letters = '789ABCDF';
-      var color = '#';
-      for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 6)];
+    photoStyle() {
+      return{
+        backgroundImage:`url(${this.photo.urls.small})`,
+        height: this.photo.height/ (this.photo.width/400) + "px",
+        backgroundColor: getRandomColor()
       }
-      return color;
     }
   },
   components:{ Icon }
