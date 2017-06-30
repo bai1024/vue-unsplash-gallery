@@ -1,7 +1,15 @@
 <template lang="pug">
 .photo-list
   list-item(
-    v-for="photo in photos",
+    v-for="photo in photos.slice(0, -2)",
+    :key="photo.id",
+    :photo="photo",
+  )
+  v-waypoint(
+    @waypoint-in="nextBatch",
+  )
+  list-item(
+    v-for="photo in photos.slice(-2)",
     :key="photo.id",
     :photo="photo",
   )
@@ -9,17 +17,28 @@
 
 <script>
 import ListItem from "@/components/list-item"
+import { bus } from "@/global"
 
 export default {
   props: {
     photos: {
       type: Array,
-      required: true
+      required: true,
+    },
+  },
+  data() {
+    return {
+      text: "",
     }
   },
-  components: { ListItem }
-};
+  methods: {
+    nextBatch () {
+      bus.$emit("nextBatch")
+    },
+  },
+  components:{ ListItem },
+}
 </script>
 
-<style lang="css" scoped>
+<style lang="stylus">
 </style>

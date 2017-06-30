@@ -1,10 +1,9 @@
 <template lang="pug">
 .list-item
-  div
-    img.list-item__photo(
-      :src="photo.urls.regular"
-      @click="zoomIn"
-    )
+  .list-item__photo(
+    :style="{backgroundImage:'url(' + photo.urls.regular + ')'}"
+    @click="zoomIn"
+  )
   .list-item__info
     .list-item__info-likes
       icon(name="heart")
@@ -18,6 +17,7 @@
 
 <script>
 import Icon from "vue-awesome/components/Icon"
+import { getRandomColor } from "@/utlis"
 import { bus } from "@/global"
 
 export default {
@@ -29,9 +29,14 @@ export default {
   },
   methods: {
     zoomIn() {
-      console.log('adfa')
       bus.$emit("zoomIn",this.photo.urls.full)
     }
+  },
+  mounted() {
+    const width = this.$el.clientWidth
+    const height = this.photo.height / this.photo.width * width
+    this.$el.style.height = height + "px"
+    this.$el.style.backgroundColor = getRandomColor()
   },
   components:{ Icon }
 }
@@ -39,11 +44,11 @@ export default {
 
 <style lang="stylus" scoped>
 .list-item
-  margin-bottom: 70px
+  margin-bottom: 100px
 
 .list-item__photo
   width: 100%
-  background-color: #ddd
+  height: 100%
   cursor: zoom-in
 
 .list-item__info

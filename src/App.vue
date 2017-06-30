@@ -13,82 +13,105 @@
   )
   .gallery__layout
     icon-list(
-      :classObj="{ 'gallery__layout__btn--active': layout === 1 }"
-      @click.native="layout = LIST_LAYOUT"
+      class="gallery__layout__btn",
+      :classObj="{'gallery__layout__btn--active': layout === LIST_LAYOUT}",
+      @click.native="layout = LIST_LAYOUT",
     )
     icon-grid(
-      :classObj="{ 'gallery__layout__btn--active': layout === GRID_LAYOUT }"
-      @click.native="layout = GRID_LAYOUT"
+      class="gallery__layout__btn",
+      :classObj="{'gallery__layout__btn--active': layout === GRID_LAYOUT}",
+      @click.native="layout = GRID_LAYOUT",
     )
   template(v-if="photos")
     photo-list(
       :photos="photos",
-      v-if="layout === LIST_LAYOUT"
+      :isLoading="isLoading",
+      v-if="layout === LIST_LAYOUT",
     )
     photo-grid(
-      :photos="photos"
-      v-if="layout === GRID_LAYOUT"
+      :photos="photos",
+      v-if="layout === GRID_LAYOUT",
     )
-      
-  loading(v-else)
+  loading(v-if="isLoading")
 </template>
 
 <script>
 import axios from 'axios'
-import Loading from '@/components/loading'
-import IconList from '@/components/icon-list'
-import IconGrid from '@/components/icon-grid'
 import PhotoList from '@/components/photo-list'
 import PhotoGrid from '@/components/photo-grid'
-import { bus } from '@/global'
+import IconList from '@/components/icon-list'
+import IconGrid from '@/components/icon-grid'
+import { bus } from "@/global"
+import Loading from '@/components/loading'
 
 const clientId = '47da73da2b740608b32dd1d201e72606000e8db1df885e6f2c72843cddca23a8'
+
+const PAGE_COUNT = 10 // api page
+const BATCH_COUNT = 10
 
 export default {
   data() {
     return {
       page: 1,
       layout: 1,
-      photos: null,
+      isLoading: true,
+      batch: 1,
+      allPhotos: null,
       zoomInPhotoURL: "",
       LIST_LAYOUT: 1,
       GRID_LAYOUT: 2,
     }
   },
   methods:{
-    fetchData:function() {
-      axios.get('https://api.unsplash.com/photos', {
+    fetchData() {
+      return axios.get('https://api.unsplash.com/photos', {
         params: {
           page: this.page++,
-          per_page: 30,
+          per_page: PAGE_COUNT,
           client_id: clientId
         }
       }).then(res => {
-        this.photos = res.data
-        this.data1 = this.photos.filter((d,i) => i % 3 === 0)
-        this.data2 = this.photos.filter((d,i) => i % 3 === 1)
-        this.data3 = this.photos.filter((d,i) => i % 3 === 2)
+        if(this.allPhotos == null) {
+          this.allPhotos = res.data
+        } else {
+          this.allPhotos = this.allPhotos.concat(res.data)
+        }
+        this.isLoading = false
       })
     },
-    waypointHandler(){
-
-    }
-  },
-  created() {
-    bus.$on("zoomIn", (fullURL) => {
-      console.log('hahahha')
+    zoomInPhoto(fullURL){
       this.zoomInPhotoURL = fullURL
-    })
+    },
+  },
+  computed: {
+    photos() {
+      if(this.allPhotos == null) return null
+      return this.allPhotos.slice(0, this.batch * BATCH_COUNT)
+    },
   },
   created(){
+    bus.$on("zoomIn", (fullURL) => {
+      this.zoomInPhotoURL = fullURL
+    })
+    bus.$on("nextBatch", () => {
+      const total = this.allPhotos.length
+      if(this.batch * BATCH_COUNT === total) {
+        this.isLoading = true
+        this.fetchData().then(() => {
+          this.batch++
+        })
+      } else {
+        this.batch++
+      }
+    })
     this.fetchData()
   },
   components: {
-    Loading,
+    PhotoList,
+    PhotoGrid,
     IconList,
     IconGrid,
-    PhotoList,
-    PhotoGrid
+    Loading
   },
 }
 </script>
@@ -107,13 +130,15 @@ export default {
   margin-top: 60px
 
 .gallery__header
-  padding-top: 60px
   padding-bottom: 72px
   text-align: left
-  > h2
-    font-size: 18px
+  > h1
+    font-family: 'Courgette'
+    font-size: 36px
     font-weight: 400
     color: #111
+  > p
+    font-weight: 400
     line-height: 1.6
 
 .gallery__zoom-in
@@ -133,20 +158,13 @@ export default {
   text-align: right
 
 .gallery__layout__btn
-    width: 20px;
-    fill: gray;
-    margin: 0 10px;
-    cursor: pointer;
-    &:hover
-      fill: #111
-      
+  width: 20px;
+  fill: gray;
+  margin: 0 10px;
+  cursor: pointer;
+  &:hover
+    fill: #111
+
 .gallery__layout__btn--active
   fill: #111
-
-.gallery__grid__container
-  display: flex
-  justify-content: space-between
-  
-.gallery__grid
-  width: 32%
 </style>

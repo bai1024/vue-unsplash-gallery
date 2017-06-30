@@ -1,10 +1,19 @@
 <template lang="pug">
 .photo-grid
   .photo-grid__column(
-    v-for="c in columns(3)"
+    v-for="(c, i) in columns(3)"
   )
     grid-item(
-      v-for="photo in c",
+      v-for="photo in c.slice(0,-2)",
+      :key="photo.id",
+      :photo="photo",
+    )
+    v-waypoint(
+      v-if="i === columnNumber - 1",
+      @waypoint-in="nextBatch",
+    )
+    grid-item(
+      v-for="photo in c.slice(-2)",
       :key="photo.id",
       :photo="photo",
     )
@@ -12,12 +21,18 @@
 
 <script>
 import GridItem from "@/components/grid-item"
+import { bus } from "@/global"
 
 export default {
   props: {
     photos: {
       type: Array,
       required: true
+    }
+  },
+  data() {
+    return{
+      columnNumber: 3,
     }
   },
   methods: {
@@ -27,7 +42,10 @@ export default {
         result.push(this.photos.filter((_,j) => j % n === i))
       }
       return result
-    }
+    },
+    nextBatch () {
+      bus.$emit("nextBatch")
+    },
   },
   components: { GridItem }
 };
