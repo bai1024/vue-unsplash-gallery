@@ -46,7 +46,7 @@ import Loading from '@/components/loading'
 
 const clientId = '47da73da2b740608b32dd1d201e72606000e8db1df885e6f2c72843cddca23a8'
 
-const PAGE_COUNT = 10 // api page
+const PAGE_COUNT = 50 // api page
 const BATCH_COUNT = 10
 
 export default {
@@ -117,6 +117,15 @@ export default {
 </script>
 
 <style src='normalize.css'></style>
+<style>
+@font-face {
+    font-family: 'Courgette';
+    src: url('../static/font/courgette-v4-latin-regular.woff2') format('woff2'),
+         url('../static/font/courgette-v4-latin-regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+</style>
 <style lang='stylus'>
 #app
   width: 80%

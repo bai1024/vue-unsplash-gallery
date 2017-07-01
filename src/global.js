@@ -1,6 +1,5 @@
 import Vue from "vue"
 import VueWaypoint from "vue-waypoint"
-import "@/font/courgette.css"
 
 export const bus = new Vue()
 
