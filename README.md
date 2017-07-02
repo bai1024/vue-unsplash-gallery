@@ -1,6 +1,6 @@
 # Vue Unsplash Gallery
 
-[Online Demo](https://dingdingbai.github.io/vue-unsplash-gallery/)
+使用Vue和Unsplash API构建的画廊，[Online Demo](https://dingdingbai.github.io/vue-unsplash-gallery/)
 
 <p align="center">
   <img src="http://ww1.sinaimg.cn/large/9b85365dgy1fh4fp8zxunj210x0qze7c" alt="images">
