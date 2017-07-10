@@ -6,11 +6,7 @@
       span Beautiful,free photos.
       br
       span Gifted by the world's most generous community of photographers. 🎁
-  .gallery__zoom-in(
-    v-show="zoomInPhotoURL !== ''"
-    :style="{backgroundImage:'url(' + zoomInPhotoURL + ')'}",
-    @click="zoomInPhotoURL = ''"
-  )
+  cover-image
   .gallery__layout
     icon-list(
       class="gallery__layout__btn",
@@ -32,7 +28,7 @@
       :photos="photos",
       v-if="layout === GRID_LAYOUT",
     )
-  loading(v-if="isLoading")
+  _loading(v-if="isLoading")
 </template>
 
 <script>
@@ -41,8 +37,8 @@ import PhotoList from '@/components/photo-list'
 import PhotoGrid from '@/components/photo-grid'
 import IconList from '@/components/icon-list'
 import IconGrid from '@/components/icon-grid'
+import CoverImage from "@/components/cover-image"
 import { bus } from "@/global"
-import Loading from '@/components/loading'
 
 const clientId = '47da73da2b740608b32dd1d201e72606000e8db1df885e6f2c72843cddca23a8'
 
@@ -57,7 +53,6 @@ export default {
       isLoading: true,
       batch: 1,
       allPhotos: null,
-      zoomInPhotoURL: "",
       LIST_LAYOUT: 1,
       GRID_LAYOUT: 2,
     }
@@ -79,9 +74,6 @@ export default {
         this.isLoading = false
       })
     },
-    zoomInPhoto(fullURL){
-      this.zoomInPhotoURL = fullURL
-    },
   },
   computed: {
     photos() {
@@ -90,9 +82,6 @@ export default {
     },
   },
   created(){
-    bus.$on("zoomIn", (fullURL) => {
-      this.zoomInPhotoURL = fullURL
-    })
     bus.$on("nextBatch", () => {
       const total = this.allPhotos.length
       if(this.batch * BATCH_COUNT === total) {
@@ -111,7 +100,7 @@ export default {
     PhotoGrid,
     IconList,
     IconGrid,
-    Loading
+    CoverImage,
   },
 }
 </script>
@@ -149,18 +138,6 @@ export default {
   > p
     font-weight: 400
     line-height: 1.6
-
-.gallery__zoom-in
-  position: fixed
-  top: 0
-  left: 0
-  width: 100vw
-  height: 100vh
-  z-index: 6
-  background-position: 50%
-  background-size: cover
-  cursor: zoom-out
-  transition: transform .35s cubic-bezier(.77,0,.175,1),-webkit-transform .35s cubic-bezier(.77,0,.175,1);
 
 .gallery__layout
   margin-bottom: 24px;

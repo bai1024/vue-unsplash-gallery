@@ -1,16 +1,16 @@
 <template lang="pug">
-  .grid-item
+  .grid-item(@click="zoomIn")
     .grid-item__photo(:style="photoStyle")
-    .grid-item__hover(@click="zoomIn")
+    .grid-item__hover
     .grid-item__info
       .grid-item__info-likes
-        icon(name="heart") 
+        icon(name="heart")
         span {{ photo.likes }}
       .grid-item__info-user
-        img(:src="photo.user.profile_image.small") 
+        img(:src="photo.user.profile_image.small")
         a(:href="photo.user.links.html") {{ photo.user.name }}
-      a.grid-item__info-download(:href="photo.urls.raw", download) 
-        icon(name="arrow-down") 
+      a.grid-item__info-download(:href="photo.urls.raw", download)
+        icon(name="arrow-down")
 </template>
 
 <script>
@@ -52,6 +52,7 @@ export default {
 .grid-item
   margin-bottom: 20px
   position: relative
+  cursor:zoom-in
   &:hover
     .grid-item__hover
       background-image: linear-gradient(180deg,rgba(0,0,0,.25) 0,transparent 40%,transparent 60%,rgba(0,0,0,.3));
@@ -66,7 +67,6 @@ export default {
   height: 100%
 
 .grid-item__hover
-  cursor:zoom-in
   position: absolute
   width: 100%;
   height: 100%

@@ -42,13 +42,14 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .list-item
   margin-bottom: 100px
 
 .list-item__photo
   width: 100%
   height: 100%
+  background-size: cover
   cursor: zoom-in
 
 .list-item__info
